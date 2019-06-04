@@ -22,17 +22,18 @@ import android.view.View;
  */
 public class VerticalSeekBar extends View {
     private static final String TAG = VerticalSeekBar.class.getSimpleName();
-    private int startColor = Color.GRAY;
-    private int middleColor = Color.GRAY;
-    private int endColor = Color.GRAY;
+    private int startColor = Color.parseColor("#A71919");
+    private int middleColor = Color.parseColor("#A71919");
+    private int endColor = Color.parseColor("#A71919");
     private int thumbColor = Color.BLACK;
     private int thumbBorderColor = Color.TRANSPARENT;
     private int colorArray[] = {startColor, middleColor, endColor};
-    private int colorArray2[] = {Color.GRAY, Color.GRAY, Color.GRAY};
+    private int grayColor = Color.parseColor("#20ffffff");
+    private int colorArray2[] = {grayColor, grayColor, grayColor};
     private float x, y;
     private float mRadius;
     private float progress;
-    private float maxCount = 100f;
+    private float maxCount = 10f;
     private float sLeft, sTop, sRight, sBottom;
     private float sWidth, sHeight;
     private LinearGradient linearGradient;
@@ -59,7 +60,6 @@ public class VerticalSeekBar extends View {
     public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VerticalSeekBar, defStyle, 0);
-
         circle_radius = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_circle_radius, DEFAULT_CIRCLE_RADIUS);
         thumbColor = a.getColor(R.styleable.VerticalSeekBar_circle_color, DEFAULT_CIRCLE_COLOR);
         dragable = a.getBoolean(R.styleable.VerticalSeekBar_dragable, true);
@@ -67,7 +67,7 @@ public class VerticalSeekBar extends View {
         image_background = a.getResourceId(R.styleable.VerticalSeekBar_image_background, 0);
         a.recycle();
         setCircle_color(thumbColor);
-        setVertical_color(vertical_color);
+        //setVertical_color(vertical_color);
     }
 
     /**
@@ -187,7 +187,7 @@ public class VerticalSeekBar extends View {
             sWidth = sRight - sLeft;
             sHeight = sBottom - sTop;
             x = (float) w / 2;
-            y = (float) (1 - 0.01 * progress) * sHeight;
+            y = (float) (1 - (1 / maxCount) * progress) * sHeight;
         } else {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.outWidth = getMeasuredWidth();
@@ -205,7 +205,7 @@ public class VerticalSeekBar extends View {
             sWidth = sRight - sLeft;
             sHeight = sBottom - sTop;
             x = (float) w / 2;
-            y = (float) (1 - 0.01 * progress) * sHeight;
+            y = (float) (1 - (1 / maxCount) * progress) * sHeight;
         }
 
         drawBackground(canvas);
@@ -214,14 +214,14 @@ public class VerticalSeekBar extends View {
     }
 
     private void drawBackground(Canvas canvas) {
-        RectF rectBlackBg = new RectF(sLeft, sTop, sRight, y);
+        RectF rectBlackBg = new RectF(sLeft + sWidth / 2 - 3, sTop, sLeft + sWidth / 2 + 3, y);
         linearGradient = new LinearGradient(sLeft, sTop, sWidth, y, colorArray2, null, Shader.TileMode.MIRROR);
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
         paint.setShader(linearGradient);
         canvas.drawRoundRect(rectBlackBg, sWidth / 2, sWidth / 2, paint);
 
-        RectF rectBlackBg2 = new RectF(sLeft, y, sRight, sBottom);
+        RectF rectBlackBg2 = new RectF(sLeft + sWidth / 2 - 3, y, sLeft + sWidth / 2 + 3, sBottom);
         linearGradient = new LinearGradient(sLeft, y, sWidth, sHeight - y, colorArray, null, Shader.TileMode.MIRROR);
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
@@ -231,9 +231,8 @@ public class VerticalSeekBar extends View {
 
     private void drawCircle(Canvas canvas) {
         Paint thumbPaint = new Paint();
-
         y = y < mRadius ? mRadius : y;
-        y = y > sHeight - mRadius ? sHeight - mRadius : y;
+        y = y > sHeight - mRadius - 20 ? sHeight - mRadius + 5 : y - 5;
         thumbPaint.setAntiAlias(true);
         thumbPaint.setStyle(Paint.Style.FILL);
         thumbPaint.setColor(thumbColor);
@@ -244,21 +243,20 @@ public class VerticalSeekBar extends View {
             options.outWidth = getMeasuredWidth();
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image_background, options);
             int outH = (int) (bitmap.getHeight() * getMeasuredWidth() / bitmap.getWidth());
-
             Rect rect = new Rect(0, (int) (y - outH / 2), getMeasuredWidth(), (int) (y + outH / 2));
-            Log.e("gxy", String.valueOf(progress));
             canvas.drawBitmap(bitmap, null, rect, null);
             Paint testPaint = new Paint();
-            int value = (int) progress;
             testPaint.setColor(Color.WHITE);
             testPaint.setTextAlign(Paint.Align.CENTER);
             testPaint.setTextSize(20);
             canvas.save();
-            if (progress < 10) {
-                canvas.drawText(String.valueOf(value), rect.left + (rect.width()) / 2.0F, rect.top - thumbPaint.ascent() + (rect.height() - (thumbPaint.descent() - thumbPaint.ascent())) / 2.0F, testPaint);
-            } else {
-                canvas.drawText(String.valueOf(value), rect.left + (rect.width()) / 2.0F, rect.top - thumbPaint.ascent() + (rect.height() - (thumbPaint.descent() - thumbPaint.ascent())) / 2.0F, testPaint);
+            if (progress > maxCount) {
+                progress = maxCount;
+            } else if (progress < 0) {
+                progress = 0;
             }
+            int value = (int) progress;
+            canvas.drawText(String.valueOf(value), rect.left + (rect.width()) / 2.0F, rect.top - thumbPaint.ascent() + (rect.height() - (thumbPaint.descent() - thumbPaint.ascent())) / 2.0F, testPaint);
             canvas.restore();
         }
     }
@@ -269,7 +267,7 @@ public class VerticalSeekBar extends View {
             return true;
         }
         this.y = event.getY();
-        progress = (sHeight - y) / sHeight * 100;
+        progress = (sHeight - y) / sHeight * maxCount;
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -302,12 +300,21 @@ public class VerticalSeekBar extends View {
         invalidate();
     }
 
+    public float getProgress() {
+        return progress;
+    }
+
+    public void setMaxCount(float max) {
+        maxCount = max;
+        invalidate();
+    }
+
     public void onSlideProgress(int event, float progress) {
         if (progress < 0) {
             progress = 0;
         }
-        if (progress > 100) {
-            progress = 100;
+        if (progress > maxCount) {
+            progress = maxCount;
         }
         switch (event) {
             case MotionEvent.ACTION_UP:
