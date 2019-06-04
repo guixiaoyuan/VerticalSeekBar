@@ -1,0 +1,11 @@
+<resources>
+    <declare-styleable name="VerticalSeekBar">
+        <attr name="vertical_color" format="color"/>
+        <attr name="circle_radius" format="dimension"/>
+        <attr name="circle_color" format="color"/>
+        <attr name="dragable" format="boolean"/>
+        <attr name="image_background" format="reference"/>
+        <attr name="max_count" format="integer"/>
+        <attr name="min_count" format="integer"/>
+    </declare-styleable>
+</resources>
