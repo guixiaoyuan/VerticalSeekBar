@@ -264,7 +264,7 @@ public class VerticalSeekBar extends View {
             testPaint.setTextSize(20);
             canvas.save();
             if (progress > maxCount) {
-                progress = maxCount - minCount;
+                progress = maxCount;
             } else if (progress < minCount) {
                 progress = minCount;
             }
