@@ -305,6 +305,7 @@ public class VerticalSeekBar extends View {
     public interface OnSlideChangeListener {
         void OnSlideChangeListener(View view, float progress);
 
+
         void onSlideStopTouch(View view, float progress);
     }
 
