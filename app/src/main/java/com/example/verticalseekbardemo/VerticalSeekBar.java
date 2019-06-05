@@ -34,6 +34,7 @@ public class VerticalSeekBar extends View {
     private float mRadius;
     private float progress;
     private float maxCount = 10f;
+    private float minCount = 0f;
     private float sLeft, sTop, sRight, sBottom;
     private float sWidth, sHeight;
     private LinearGradient linearGradient;
@@ -55,6 +56,16 @@ public class VerticalSeekBar extends View {
 
     public VerticalSeekBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VerticalSeekBar);
+        circle_radius = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_circle_radius, DEFAULT_CIRCLE_RADIUS);
+        thumbColor = a.getColor(R.styleable.VerticalSeekBar_circle_color, DEFAULT_CIRCLE_COLOR);
+        dragable = a.getBoolean(R.styleable.VerticalSeekBar_dragable, true);
+        vertical_color = a.getColor(R.styleable.VerticalSeekBar_vertical_color, Color.GRAY);
+        image_background = a.getResourceId(R.styleable.VerticalSeekBar_image_background, 0);
+        maxCount = a.getInteger(R.styleable.VerticalSeekBar_max_count, 10);
+        minCount = a.getInteger(R.styleable.VerticalSeekBar_min_count, 0);
+        a.recycle();
+        setCircle_color(thumbColor);
     }
 
     public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle) {
@@ -65,6 +76,8 @@ public class VerticalSeekBar extends View {
         dragable = a.getBoolean(R.styleable.VerticalSeekBar_dragable, true);
         vertical_color = a.getColor(R.styleable.VerticalSeekBar_vertical_color, Color.GRAY);
         image_background = a.getResourceId(R.styleable.VerticalSeekBar_image_background, 0);
+        maxCount = a.getResourceId(R.styleable.VerticalSeekBar_max_count, 10);
+        minCount = a.getResourceId(R.styleable.VerticalSeekBar_min_count, 0);
         a.recycle();
         setCircle_color(thumbColor);
         //setVertical_color(vertical_color);
@@ -187,7 +200,7 @@ public class VerticalSeekBar extends View {
             sWidth = sRight - sLeft;
             sHeight = sBottom - sTop;
             x = (float) w / 2;
-            y = (float) (1 - (1 / maxCount) * progress) * sHeight;
+            y = (float) (1 - (1 / (maxCount - minCount)) * (progress) * sHeight);
         } else {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.outWidth = getMeasuredWidth();
@@ -205,7 +218,7 @@ public class VerticalSeekBar extends View {
             sWidth = sRight - sLeft;
             sHeight = sBottom - sTop;
             x = (float) w / 2;
-            y = (float) (1 - (1 / maxCount) * progress) * sHeight;
+            y = (float) (1 - (1 / (maxCount - minCount)) * (progress - minCount)) * sHeight;
         }
 
         drawBackground(canvas);
@@ -232,7 +245,7 @@ public class VerticalSeekBar extends View {
     private void drawCircle(Canvas canvas) {
         Paint thumbPaint = new Paint();
         y = y < mRadius ? mRadius : y;
-        y = y > sHeight - mRadius - 20 ? sHeight - mRadius + 5 : y - 5;
+        y = y > sHeight - mRadius - 20 ? sHeight - mRadius + 4 : y - 4;
         thumbPaint.setAntiAlias(true);
         thumbPaint.setStyle(Paint.Style.FILL);
         thumbPaint.setColor(thumbColor);
@@ -251,9 +264,9 @@ public class VerticalSeekBar extends View {
             testPaint.setTextSize(20);
             canvas.save();
             if (progress > maxCount) {
-                progress = maxCount;
-            } else if (progress < 0) {
-                progress = 0;
+                progress = maxCount - minCount;
+            } else if (progress < minCount) {
+                progress = minCount;
             }
             int value = (int) progress;
             canvas.drawText(String.valueOf(value), rect.left + (rect.width()) / 2.0F, rect.top - thumbPaint.ascent() + (rect.height() - (thumbPaint.descent() - thumbPaint.ascent())) / 2.0F, testPaint);
@@ -267,7 +280,11 @@ public class VerticalSeekBar extends View {
             return true;
         }
         this.y = event.getY();
-        progress = (sHeight - y) / sHeight * maxCount;
+        if (minCount < 0) {
+            progress = (sHeight - y) / sHeight * (maxCount - minCount) + minCount;
+        } else {
+            progress = (sHeight - y) / sHeight * (maxCount - minCount);
+        }
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -309,12 +326,16 @@ public class VerticalSeekBar extends View {
         invalidate();
     }
 
+    public void setMinCount(float minCount) {
+        this.minCount = minCount;
+    }
+
     public void onSlideProgress(int event, float progress) {
-        if (progress < 0) {
-            progress = 0;
+        if (progress < minCount) {
+            progress = minCount;
         }
         if (progress > maxCount) {
-            progress = maxCount;
+            progress = maxCount - minCount;
         }
         switch (event) {
             case MotionEvent.ACTION_UP:
