@@ -8,15 +8,159 @@
         android:background="#000000"
         tools:context=".MainActivity">
 
-    <com.example.verticalseekbardemo.VerticalSeekBar
-            android:id="@+id/vsb_navigation"
-            android:layout_width="50px"
-            android:layout_height="300px"
-            android:layout_gravity="center_horizontal"
-            android:visibility="visible"
-            app:dragable="true"
-            android:layout_centerInParent="true"
-            app:image_background="@drawable/ic_voice_thumb"
-            tools:ignore="MissingConstraints"/>
+    <LinearLayout
+            android:id="@+id/ll_volume_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="120px"
+            android:layout_marginTop="70px"
+            android:orientation="vertical">
+
+        <com.example.verticalseekbardemo.VerticalSeekBar
+                android:id="@+id/vsb_63_hz"
+                android:layout_width="50px"
+                android:layout_height="300px"
+                android:layout_gravity="center_horizontal"
+                android:visibility="visible"
+                app:dragable="true"
+                app:image_background="@drawable/ic_voice_thumb"
+                app:max_count="12"
+                app:min_count="-12"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16px"
+                android:text="80Hz"
+                android:textColor="@color/white"
+                android:textSize="30px"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_volume_media"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="150px"
+            android:layout_marginTop="70px"
+            android:layout_toRightOf="@+id/ll_volume_navigation"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <com.example.verticalseekbardemo.VerticalSeekBar
+                android:id="@+id/vsb_400_hz"
+                android:layout_width="50px"
+                android:layout_height="300px"
+                android:visibility="visible"
+                app:dragable="true"
+                app:max_count="12"
+                app:min_count="-12"
+                app:image_background="@drawable/ic_voice_thumb"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16px"
+                android:text="500Hz"
+                android:textColor="@color/white"
+                android:textSize="30px"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_volume_conversation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140px"
+            android:layout_marginTop="70px"
+            android:layout_toRightOf="@+id/ll_volume_media"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <com.example.verticalseekbardemo.VerticalSeekBar
+                android:id="@+id/vsb_1k_hz"
+                android:layout_width="50px"
+                android:layout_height="300px"
+                android:visibility="visible"
+                app:dragable="true"
+                app:max_count="12"
+                app:min_count="-12"
+                app:image_background="@drawable/ic_voice_thumb"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16px"
+                android:text="1KHz"
+                android:textColor="@color/white"
+                android:textSize="30px"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_volume_interaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="120px"
+            android:layout_marginTop="70px"
+            android:layout_toRightOf="@+id/ll_volume_conversation"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <com.example.verticalseekbardemo.VerticalSeekBar
+                android:id="@+id/vsb_2.5k_hz"
+                android:layout_width="50px"
+                android:layout_height="300px"
+                android:visibility="visible"
+                app:dragable="true"
+                app:max_count="12"
+                app:min_count="-12"
+                app:image_background="@drawable/ic_voice_thumb"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16px"
+                android:text="5KHz"
+                android:textColor="@color/white"
+                android:textSize="30px"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_volume_system"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100px"
+            android:layout_marginTop="70px"
+            android:layout_toRightOf="@+id/ll_volume_interaction"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <com.example.verticalseekbardemo.VerticalSeekBar
+                android:id="@+id/vsb_6.3k_hz"
+                android:layout_width="50px"
+                android:layout_height="300px"
+                android:visibility="visible"
+                app:dragable="true"
+                app:max_count="12"
+                app:min_count="-12"
+                app:image_background="@drawable/ic_voice_thumb"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16px"
+                android:text="16KHz"
+                android:textColor="@color/white"
+                android:textSize="30px"/>
+    </LinearLayout>
+
 
 </RelativeLayout>
