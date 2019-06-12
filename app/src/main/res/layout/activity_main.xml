@@ -163,4 +163,19 @@
     </LinearLayout>
 
 
+    <com.example.verticalseekbardemo.HorizontalSeeker
+            android:id="@+id/seek_bar"
+            android:layout_width="380px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:focusable="false"
+            android:max="18"
+            android:maxHeight="4px"
+            android:minHeight="4px"
+            android:progressDrawable="@drawable/seekbar_horizonta"
+            android:thumbOffset="4px"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ll_volume_system"
+            tools:ignore="MissingConstraints"/>
+
 </RelativeLayout>
