@@ -7,5 +7,7 @@
         <attr name="image_background" format="reference"/>
         <attr name="max_count" format="integer"/>
         <attr name="min_count" format="integer"/>
+        <attr name="select_color" format="color"/>
+        <attr name="not_select_color" format="color"/>
     </declare-styleable>
 </resources>

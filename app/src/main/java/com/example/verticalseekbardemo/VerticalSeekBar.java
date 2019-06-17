@@ -22,13 +22,13 @@ import android.view.View;
  */
 public class VerticalSeekBar extends View {
     private static final String TAG = VerticalSeekBar.class.getSimpleName();
-    private int startColor = Color.parseColor("#A71919");
-    private int middleColor = Color.parseColor("#A71919");
-    private int endColor = Color.parseColor("#A71919");
+    private int startColor;
+    private int middleColor;
+    private int endColor;
     private int thumbColor = Color.BLACK;
     private int thumbBorderColor = Color.TRANSPARENT;
     private int colorArray[] = {startColor, middleColor, endColor};
-    private int grayColor = Color.parseColor("#20ffffff");
+    private int grayColor;
     private int colorArray2[] = {grayColor, grayColor, grayColor};
     private float x, y;
     private float mRadius;
@@ -64,23 +64,20 @@ public class VerticalSeekBar extends View {
         image_background = a.getResourceId(R.styleable.VerticalSeekBar_image_background, 0);
         maxCount = a.getInteger(R.styleable.VerticalSeekBar_max_count, 10);
         minCount = a.getInteger(R.styleable.VerticalSeekBar_min_count, 0);
+        startColor = a.getColor(R.styleable.VerticalSeekBar_select_color, Color.parseColor("#A71919"));
+        grayColor = a.getColor(R.styleable.VerticalSeekBar_not_select_color, Color.parseColor("#20ffffff"));
         a.recycle();
         setCircle_color(thumbColor);
+        colorArray[0] = startColor;
+        colorArray[1] = startColor;
+        colorArray[2] = startColor;
+        colorArray2[0] = grayColor;
+        colorArray2[1] = grayColor;
+        colorArray2[2] = grayColor;
     }
 
     public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VerticalSeekBar, defStyle, 0);
-        circle_radius = a.getDimensionPixelSize(R.styleable.VerticalSeekBar_circle_radius, DEFAULT_CIRCLE_RADIUS);
-        thumbColor = a.getColor(R.styleable.VerticalSeekBar_circle_color, DEFAULT_CIRCLE_COLOR);
-        dragable = a.getBoolean(R.styleable.VerticalSeekBar_dragable, true);
-        vertical_color = a.getColor(R.styleable.VerticalSeekBar_vertical_color, Color.GRAY);
-        image_background = a.getResourceId(R.styleable.VerticalSeekBar_image_background, 0);
-        maxCount = a.getResourceId(R.styleable.VerticalSeekBar_max_count, 10);
-        minCount = a.getResourceId(R.styleable.VerticalSeekBar_min_count, 0);
-        a.recycle();
-        setCircle_color(thumbColor);
-        //setVertical_color(vertical_color);
     }
 
     /**
